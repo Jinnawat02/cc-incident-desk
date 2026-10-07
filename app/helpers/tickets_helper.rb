@@ -20,6 +20,10 @@ module TicketsHelper
     Current.user.agent? ? "Opened by #{ticket.creator.email_address} · #{created}" : "Created #{created}"
   end
 
+  def overdue_flag(ticket)
+    tag.span("Overdue", class: "flag") if ticket.overdue?
+  end
+
   def ticket_row_class(ticket)
     "row-#{ticket.severity}" if ticket.high_priority?
   end

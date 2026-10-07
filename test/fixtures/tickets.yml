@@ -26,3 +26,4 @@ checkout_error:
   severity: urgent
   status: open
   creator: other_customer
+  escalated_at: <%= 1.hour.ago %>

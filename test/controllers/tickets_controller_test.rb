@@ -49,6 +49,22 @@ class TicketsControllerTest < ActionDispatch::IntegrationTest
     assert_nil ticket.assignee
   end
 
+  test "create schedules an escalation for an urgent ticket" do
+    sign_in_as @customer
+
+    assert_enqueued_with job: TicketEscalationJob do
+      post tickets_path, params: @valid_params
+    end
+  end
+
+  test "create schedules no escalation for a low ticket" do
+    sign_in_as @customer
+
+    assert_no_enqueued_jobs only: TicketEscalationJob do
+      post tickets_path, params: { ticket: @valid_params[:ticket].merge(severity: "low") }
+    end
+  end
+
   test "create ignores attempts to set the status or creator" do
     sign_in_as @customer
 
