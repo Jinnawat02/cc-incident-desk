@@ -9,4 +9,8 @@ class Ticket < ApplicationRecord
   validates :description, presence: true, length: { minimum: 10 }
 
   scope :recent_first, -> { order(created_at: :desc, id: :desc) }
+
+  def high_priority?
+    high? || urgent?
+  end
 end
