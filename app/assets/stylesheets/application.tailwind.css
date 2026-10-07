@@ -1,1 +1,75 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Public Sans", system-ui, sans-serif;
+
+  --color-canvas: #F4F4F1;
+  --color-surface: #FFFFFF;
+  --color-line: #E2E2DC;
+  --color-line-strong: #C9C9C2;
+  --color-line-hover: #A9A9A2;
+  --color-row-line: #EFEFEA;
+  --color-ink: #1A1A18;
+  --color-muted: #5C5C57;
+  --color-accent: #1F4F99;
+  --color-accent-dark: #163A73;
+  --color-success: #1C6B43;
+  --color-danger: #A3170D;
+  --color-danger-soft: #FDE2E0;
+}
+
+@layer base {
+  body {
+    @apply bg-canvas text-ink font-sans text-[15px];
+  }
+
+  a {
+    @apply text-accent hover:text-accent-dark;
+  }
+
+  h1 {
+    @apply text-[26px] font-bold;
+  }
+}
+
+@layer components {
+  .brand {
+    @apply text-[15px] font-bold tracking-[0.04em] uppercase text-accent no-underline;
+  }
+
+  .card {
+    @apply bg-surface border border-line rounded-lg;
+  }
+
+  .btn {
+    @apply inline-flex h-11 items-center justify-center px-[18px] rounded-md border border-transparent text-[15px] font-semibold no-underline cursor-pointer;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-white hover:bg-accent-dark hover:text-white;
+  }
+
+  .btn-plain {
+    @apply bg-surface text-ink border-line-strong font-medium hover:text-ink hover:border-line-hover;
+  }
+
+  .btn-sm {
+    @apply h-9 px-3.5 text-sm;
+  }
+
+  .field {
+    @apply flex flex-col gap-1.5;
+  }
+
+  .label {
+    @apply text-sm font-semibold;
+  }
+
+  .input {
+    @apply w-full h-11 px-3 border border-line-strong rounded-md bg-surface text-[15px] text-ink;
+  }
+
+  .alert-error {
+    @apply bg-danger-soft text-danger rounded-md px-3 py-2.5 text-sm font-medium;
+  }
+}

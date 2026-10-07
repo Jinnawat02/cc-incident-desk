@@ -1,0 +1,9 @@
+<header class="bg-surface border-b border-line">
+  <div class="max-w-[1160px] mx-auto px-6 min-h-[60px] flex flex-wrap items-center justify-between gap-3">
+    <%= link_to "Incident Desk", root_path, class: "brand" %>
+    <div class="flex items-center gap-4 text-sm text-muted">
+      <span><%= Current.user.email_address %> · <%= Current.user.role.humanize %></span>
+      <%= button_to "Log out", session_path, method: :delete, class: "btn btn-plain btn-sm" %>
+    </div>
+  </div>
+</header>
