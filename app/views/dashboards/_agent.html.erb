@@ -22,7 +22,7 @@
             <% tickets.each do |ticket| %>
               <tr id="<%= dom_id(ticket) %>" class="<%= ticket_row_class(ticket) %>">
                 <td class="muted"><%= ticket_number(ticket) %></td>
-                <td><%= link_to ticket.title, ticket, class: "title-link" %></td>
+                <td><%= link_to ticket.title, ticket, class: "title-link" %><%= overdue_flag(ticket) %></td>
                 <td><%= ticket.creator.email_address %></td>
                 <td><%= severity_badge(ticket) %></td>
                 <td><%= status_badge(ticket) %></td>
@@ -38,5 +38,5 @@
     <div class="card p-6 text-muted">No tickets match this filter.</div>
   <% end %>
 
-  <p class="hint">High and Urgent rows are tinted.</p>
+  <p class="hint">High and Urgent rows are tinted. “Overdue” = High/Urgent, still Open and unassigned after 15 minutes.</p>
 </main>

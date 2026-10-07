@@ -1,6 +1,8 @@
 require "test_helper"
 
 class TicketTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   setup do
     @ticket = Ticket.new(
       title: "Printer is on fire",
@@ -88,5 +90,54 @@ class TicketTest < ActiveSupport::TestCase
 
     assert_not @ticket.valid?
     assert_includes @ticket.errors[:assignee], "must be an agent"
+  end
+
+  test "creating a high or urgent ticket schedules an escalation in 15 minutes" do
+    freeze_time
+
+    %i[ high urgent ].each do |severity|
+      ticket = Ticket.create!(@ticket.attributes.compact.merge("severity" => severity.to_s))
+
+      assert_enqueued_with job: TicketEscalationJob, args: [ ticket ], at: 15.minutes.from_now
+    end
+  end
+
+  test "creating a low or medium ticket schedules no escalation" do
+    %i[ low medium ].each do |severity|
+      assert_no_enqueued_jobs only: TicketEscalationJob do
+        Ticket.create!(@ticket.attributes.compact.merge("severity" => severity.to_s))
+      end
+    end
+  end
+
+  test "updating a high priority ticket schedules no further escalation" do
+    assert_no_enqueued_jobs only: TicketEscalationJob do
+      tickets(:export_failure).update!(title: "Cannot export any report")
+    end
+  end
+
+  test "escalatable only while high priority, open, unassigned and not yet escalated" do
+    ticket = tickets(:slow_login)
+    ticket.severity = :urgent
+    assert ticket.escalatable?
+
+    assert_not ticket.dup.tap { |t| t.severity = :medium }.escalatable?
+    assert_not ticket.dup.tap { |t| t.status = :in_progress }.escalatable?
+    assert_not ticket.dup.tap { |t| t.assignee = users(:agent) }.escalatable?
+    assert_not ticket.dup.tap { |t| t.escalated_at = Time.current }.escalatable?
+  end
+
+  test "overdue while escalated, open and unassigned" do
+    ticket = tickets(:checkout_error)
+    assert ticket.overdue?
+
+    ticket.assignee = users(:agent)
+    assert_not ticket.overdue?
+
+    ticket.assignee = nil
+    ticket.status = :resolved
+    assert_not ticket.overdue?
+
+    assert_not tickets(:slow_login).overdue?
   end
 end

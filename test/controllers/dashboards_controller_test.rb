@@ -130,4 +130,13 @@ class DashboardsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-cable-stream-source", 1
     assert_select "tbody [data-ticket-status-id]", 2
   end
+
+  test "show flags overdue tickets for an agent" do
+    sign_in_as users(:agent)
+
+    get root_path
+
+    assert_select ".flag", count: 1
+    assert_select "##{ActionView::RecordIdentifier.dom_id(tickets(:checkout_error))} .flag", "Overdue"
+  end
 end

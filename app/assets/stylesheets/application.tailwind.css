@@ -192,4 +192,8 @@
   .role-customer {
     @apply bg-[#EDEDE8] text-[#4A4A45];
   }
+
+  .flag {
+    @apply inline-block ml-2 px-1.5 py-px rounded border border-[#E8A29C] text-danger text-[11px] font-bold tracking-[0.05em] uppercase align-middle;
+  }
 }
