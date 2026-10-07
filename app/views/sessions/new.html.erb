@@ -1,0 +1,26 @@
+<% content_for :title, "Sign in · Incident Desk" %>
+
+<div class="min-h-screen flex items-center justify-center p-6">
+  <%= form_with url: session_path, class: "card w-full max-w-[400px] p-8 flex flex-col gap-5" do |form| %>
+    <div class="flex flex-col gap-1">
+      <div class="text-sm font-bold tracking-[0.04em] uppercase text-accent">Incident Desk</div>
+      <h1>Sign in</h1>
+    </div>
+
+    <% if flash[:alert] %>
+      <div class="alert-error" role="alert"><%= flash[:alert] %></div>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :email_address, "Email", class: "label" %>
+      <%= form.email_field :email_address, class: "input", required: true, autofocus: true, autocomplete: "email", placeholder: "you@company.com", value: params[:email_address] %>
+    </div>
+
+    <div class="field">
+      <%= form.label :password, class: "label" %>
+      <%= form.password_field :password, class: "input", required: true, autocomplete: "current-password", placeholder: "••••••••", maxlength: 72 %>
+    </div>
+
+    <%= form.submit "Sign in", class: "btn btn-primary w-full" %>
+  <% end %>
+</div>
