@@ -180,4 +180,16 @@
   .notice-success {
     @apply text-sm font-semibold text-success;
   }
+
+  .role {
+    @apply px-1.5 py-px rounded text-xs font-semibold;
+  }
+
+  .role-agent {
+    @apply bg-[#E3ECFA] text-accent;
+  }
+
+  .role-customer {
+    @apply bg-[#EDEDE8] text-[#4A4A45];
+  }
 }

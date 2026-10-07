@@ -1,0 +1,9 @@
+<section class="flex flex-col gap-3">
+  <h2 class="text-lg font-bold">Comments (<span id="<%= dom_id(ticket, :comments_count) %>"><%= comments.size %></span>)</h2>
+
+  <div id="<%= dom_id(ticket, :comments) %>" class="flex flex-col gap-3">
+    <%= render partial: "comments/comment", collection: comments, as: :comment %>
+  </div>
+
+  <%= render "comments/form", ticket: ticket, comment: Comment.new %>
+</section>

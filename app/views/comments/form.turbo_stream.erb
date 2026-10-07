@@ -1,0 +1,1 @@
+<%= turbo_stream.replace dom_id(@ticket, :comment_form), partial: "comments/form", locals: { ticket: @ticket, comment: @posting.comment } %>
