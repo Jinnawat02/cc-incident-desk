@@ -1,0 +1,12 @@
+<div class="detail">
+  <span class="detail-label">Severity</span>
+  <span><%= severity_badge(ticket) %></span>
+</div>
+<div class="detail">
+  <span class="detail-label">Customer</span>
+  <span><%= ticket.creator.email_address %></span>
+</div>
+<div class="detail">
+  <span class="detail-label">Created</span>
+  <span><%= ticket_timestamp(ticket.created_at) %></span>
+</div>

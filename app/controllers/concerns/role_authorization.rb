@@ -5,4 +5,8 @@ module RoleAuthorization
     def require_customer
       redirect_to root_path, alert: "Only customers can do that." unless Current.user.customer?
     end
+
+    def require_agent
+      redirect_to root_path, alert: "Only agents can do that." unless Current.user.agent?
+    end
 end

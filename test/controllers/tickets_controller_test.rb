@@ -143,4 +143,109 @@ class TicketsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_session_path
   end
+
+  test "show subscribes the customer to live status updates without an edit form" do
+    sign_in_as @customer
+    ticket = tickets(:slow_login)
+
+    get ticket_path(ticket)
+
+    assert_select "turbo-cable-stream-source", 1
+    assert_select "[data-ticket-status-id=?]", ticket.id.to_s, 2
+    assert_select "form[action=?]", ticket_path(ticket), count: 0
+  end
+
+  test "show gives an agent the status and assignee form" do
+    sign_in_as users(:agent)
+    ticket = tickets(:export_failure)
+
+    get ticket_path(ticket)
+
+    assert_select "form[action=?]", ticket_path(ticket) do
+      assert_select "select[name=?] option[selected]", "ticket[status]", text: "In Progress"
+      assert_select "select[name=?] option[selected]", "ticket[assignee_id]", text: "agent@example.com"
+      assert_select "select[name=?] option", "ticket[assignee_id]", text: "customer@example.com", count: 0
+    end
+    assert_select ".text-muted", /Opened by customer@example\.com/
+  end
+
+  test "update lets an agent change the status" do
+    sign_in_as users(:agent)
+    ticket = tickets(:slow_login)
+
+    assert_difference -> { ticket.status_changes.count }, 1 do
+      patch ticket_path(ticket), params: { ticket: { status: "in_progress", assignee_id: "" } }
+    end
+
+    assert_redirected_to ticket_path(ticket)
+    assert ticket.reload.in_progress?
+    follow_redirect!
+    assert_select "[role=status]", "Saved. The customer sees the new status now."
+  end
+
+  test "update broadcasts the new status badge" do
+    sign_in_as users(:agent)
+    ticket = tickets(:slow_login)
+
+    perform_enqueued_jobs do
+      patch ticket_path(ticket), params: { ticket: { status: "resolved", assignee_id: "" } }
+    end
+
+    assert_turbo_stream_broadcasts ticket, count: 1
+    assert_turbo_stream_broadcasts [ ticket.creator, :tickets ], count: 1
+  end
+
+  test "update lets an agent assign a ticket" do
+    sign_in_as users(:agent)
+    ticket = tickets(:slow_login)
+
+    patch ticket_path(ticket), params: { ticket: { status: "open", assignee_id: users(:agent).id } }
+
+    assert_redirected_to ticket_path(ticket)
+    assert_equal users(:agent), ticket.reload.assignee
+  end
+
+  test "update with an unknown status re-renders the ticket" do
+    sign_in_as users(:agent)
+    ticket = tickets(:slow_login)
+
+    assert_no_difference -> { TicketStatusChange.count } do
+      patch ticket_path(ticket), params: { ticket: { status: "closed", assignee_id: "" } }
+    end
+
+    assert_response :unprocessable_entity
+    assert_select "[role=alert]", /Status is not included in the list/
+    assert ticket.reload.open?
+  end
+
+  test "update with a customer as assignee re-renders the ticket" do
+    sign_in_as users(:agent)
+    ticket = tickets(:slow_login)
+
+    patch ticket_path(ticket), params: { ticket: { status: "open", assignee_id: @customer.id } }
+
+    assert_response :unprocessable_entity
+    assert_select "[role=alert]", /Assignee must be an agent/
+    assert_nil ticket.reload.assignee
+  end
+
+  test "update is not allowed for a customer" do
+    sign_in_as @customer
+    ticket = tickets(:slow_login)
+
+    patch ticket_path(ticket), params: { ticket: { status: "resolved" } }
+
+    assert_redirected_to root_path
+    assert_equal "Only agents can do that.", flash[:alert]
+    assert ticket.reload.open?
+  end
+
+  test "update requires authentication" do
+    ticket = tickets(:slow_login)
+
+    patch ticket_path(ticket), params: { ticket: { status: "resolved" } }
+
+    assert_redirected_to new_session_path
+    assert ticket.reload.open?
+  end
 end

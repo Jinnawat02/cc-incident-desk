@@ -69,4 +69,24 @@ class TicketTest < ActiveSupport::TestCase
     assert_not tickets(:slow_login).high_priority?
     assert_not tickets(:invoice_typo).high_priority?
   end
+
+  test "accepts an agent as assignee" do
+    @ticket.assignee = users(:agent)
+
+    assert @ticket.valid?
+  end
+
+  test "rejects a customer as assignee" do
+    @ticket.assignee = users(:other_customer)
+
+    assert_not @ticket.valid?
+    assert_includes @ticket.errors[:assignee], "must be an agent"
+  end
+
+  test "rejects an assignee that does not exist" do
+    @ticket.assignee_id = User.maximum(:id) + 1
+
+    assert_not @ticket.valid?
+    assert_includes @ticket.errors[:assignee], "must be an agent"
+  end
 end

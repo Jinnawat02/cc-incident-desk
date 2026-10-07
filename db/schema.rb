@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_07_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_07_120000) do
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -18,6 +18,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_07_100000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "ticket_status_changes", force: :cascade do |t|
+    t.integer "ticket_id", null: false
+    t.integer "actor_id", null: false
+    t.integer "from_status", null: false
+    t.integer "to_status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actor_id"], name: "index_ticket_status_changes_on_actor_id"
+    t.index ["ticket_id"], name: "index_ticket_status_changes_on_ticket_id"
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -45,6 +56,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_07_100000) do
   end
 
   add_foreign_key "sessions", "users"
+  add_foreign_key "ticket_status_changes", "tickets"
+  add_foreign_key "ticket_status_changes", "users", column: "actor_id"
   add_foreign_key "tickets", "users", column: "assignee_id"
   add_foreign_key "tickets", "users", column: "creator_id"
 end

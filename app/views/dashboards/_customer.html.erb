@@ -1,4 +1,5 @@
 <% content_for :title, "My tickets · Incident Desk" %>
+<%= turbo_stream_from Current.user, :tickets %>
 
 <main class="max-w-[1040px] mx-auto px-6 py-8 flex flex-col gap-5">
   <div class="flex flex-wrap items-center justify-between gap-3">
@@ -19,7 +20,7 @@
                 <td class="muted"><%= ticket_number(ticket) %></td>
                 <td><%= link_to ticket.title, ticket, class: "title-link" %></td>
                 <td><%= severity_badge(ticket) %></td>
-                <td><%= status_badge(ticket) %></td>
+                <td><%= render "tickets/status_badge", ticket: ticket %></td>
                 <td class="muted"><%= ticket_timestamp(ticket.created_at) %></td>
               </tr>
             <% end %>
@@ -30,4 +31,6 @@
   <% else %>
     <div class="card p-6 text-muted">You have not submitted any tickets yet.</div>
   <% end %>
+
+  <p class="hint">Status updates appear here automatically.</p>
 </main>
