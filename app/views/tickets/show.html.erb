@@ -30,7 +30,7 @@
         </div>
         <div class="detail">
           <span class="detail-label">Assignee</span>
-          <span><%= @ticket.assignee&.email_address || "Unassigned" %></span>
+          <span><%= assignee_label(@ticket) %></span>
         </div>
         <div class="detail">
           <span class="detail-label">Severity</span>

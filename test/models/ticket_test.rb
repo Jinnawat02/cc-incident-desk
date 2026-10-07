@@ -62,4 +62,11 @@ class TicketTest < ActiveSupport::TestCase
 
     assert_equal newest, Ticket.recent_first.first
   end
+
+  test "high and urgent tickets are high priority" do
+    assert tickets(:export_failure).high_priority?
+    assert tickets(:checkout_error).high_priority?
+    assert_not tickets(:slow_login).high_priority?
+    assert_not tickets(:invoice_typo).high_priority?
+  end
 end

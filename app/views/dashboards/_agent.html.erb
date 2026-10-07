@@ -1,9 +1,42 @@
 <% content_for :title, "All tickets · Incident Desk" %>
 
 <main class="max-w-[1160px] mx-auto px-6 py-8 flex flex-col gap-5">
-  <div class="flex flex-wrap items-center justify-between gap-3">
-    <h1>All tickets</h1>
-  </div>
+  <h1>All tickets</h1>
 
-  <div class="card p-6 text-muted">No tickets yet.</div>
+  <nav class="flex flex-wrap gap-2" aria-label="Filter by status">
+    <% filter.options.each do |option| %>
+      <%= link_to "#{option.titleize} (#{filter.count_for(option)})", root_path(status: option),
+            class: [ "pill", { "is-active": filter.selected?(option) } ],
+            aria: { current: ("page" if filter.selected?(option)) } %>
+    <% end %>
+  </nav>
+
+  <% if tickets.any? %>
+    <div class="card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="table table-wide">
+          <thead>
+            <tr><th>ID</th><th>Title</th><th>Customer</th><th>Severity</th><th>Status</th><th>Assignee</th><th>Created at</th></tr>
+          </thead>
+          <tbody>
+            <% tickets.each do |ticket| %>
+              <tr id="<%= dom_id(ticket) %>" class="<%= ticket_row_class(ticket) %>">
+                <td class="muted"><%= ticket_number(ticket) %></td>
+                <td><%= link_to ticket.title, ticket, class: "title-link" %></td>
+                <td><%= ticket.creator.email_address %></td>
+                <td><%= severity_badge(ticket) %></td>
+                <td><%= status_badge(ticket) %></td>
+                <td><%= assignee_label(ticket) %></td>
+                <td class="muted"><%= ticket_timestamp(ticket.created_at) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="card p-6 text-muted">No tickets match this filter.</div>
+  <% end %>
+
+  <p class="hint">High and Urgent rows are tinted.</p>
 </main>
