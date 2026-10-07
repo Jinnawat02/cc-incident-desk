@@ -1,0 +1,40 @@
+<% content_for :title, "New ticket · Incident Desk" %>
+
+<main class="max-w-[640px] mx-auto px-6 py-8 flex flex-col gap-5">
+  <%= back_to_dashboard_link %>
+  <h1>New ticket</h1>
+
+  <%= form_with model: @ticket, class: "card p-6 flex flex-col gap-5" do |form| %>
+    <% if @ticket.errors.any? %>
+      <div class="alert-error" role="alert">
+        <ul class="list-disc pl-5">
+          <% @ticket.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :title, class: "label" %>
+      <%= form.text_field :title, class: "input", required: true, minlength: 5, placeholder: "Short summary of the problem" %>
+      <span class="hint">At least 5 characters.</span>
+    </div>
+
+    <div class="field">
+      <%= form.label :description, class: "label" %>
+      <%= form.text_area :description, class: "textarea", rows: 6, required: true, minlength: 10, placeholder: "What happened? What did you expect?" %>
+      <span class="hint">At least 10 characters. Plain text or basic Markdown.</span>
+    </div>
+
+    <div class="field">
+      <%= form.label :severity, class: "label" %>
+      <%= form.select :severity, severity_options, {}, class: "input" %>
+    </div>
+
+    <div class="flex flex-wrap justify-end gap-3">
+      <%= link_to "Cancel", root_path, class: "btn btn-plain" %>
+      <%= form.submit "Submit ticket", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</main>

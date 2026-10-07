@@ -30,4 +30,12 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.valid?
     assert_includes user.errors[:role], "is not included in the list"
   end
+
+  test "customers see only the tickets they created" do
+    assert_equal [ tickets(:export_failure), tickets(:slow_login) ].sort, users(:customer).visible_tickets.sort
+  end
+
+  test "agents see every ticket" do
+    assert_equal Ticket.all.sort, users(:agent).visible_tickets.sort
+  end
 end

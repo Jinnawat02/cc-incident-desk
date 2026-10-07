@@ -69,6 +69,86 @@
     @apply w-full h-11 px-3 border border-line-strong rounded-md bg-surface text-[15px] text-ink;
   }
 
+  .textarea {
+    @apply w-full px-3 py-2.5 border border-line-strong rounded-md bg-surface text-[15px] text-ink resize-y;
+  }
+
+  .hint {
+    @apply text-[13px] text-muted;
+  }
+
+  .back {
+    @apply text-sm font-medium no-underline;
+  }
+
+  .section-label {
+    @apply mb-2 text-sm font-semibold text-muted;
+  }
+
+  .detail {
+    @apply flex flex-col gap-1;
+  }
+
+  .detail-label {
+    @apply text-[13px] font-semibold text-muted;
+  }
+
+  .sev {
+    @apply inline-block px-2 py-0.5 rounded text-[13px] font-semibold whitespace-nowrap;
+  }
+
+  .sev-low {
+    @apply bg-[#EDEDE8] text-[#4A4A45];
+  }
+
+  .sev-medium {
+    @apply bg-[#E3ECFA] text-accent;
+  }
+
+  .sev-high {
+    @apply bg-[#FDEBD3] text-[#8A4100];
+  }
+
+  .sev-urgent {
+    @apply bg-danger-soft text-danger;
+  }
+
+  .st {
+    @apply inline-block px-2.5 py-0.5 rounded-full text-[13px] font-semibold whitespace-nowrap border border-transparent;
+  }
+
+  .st-open {
+    @apply bg-white text-[#3D3D38] border-line-strong;
+  }
+
+  .st-in-progress {
+    @apply bg-[#E3ECFA] text-accent;
+  }
+
+  .st-resolved {
+    @apply bg-[#E2F3E9] text-success;
+  }
+
+  .table {
+    @apply w-full min-w-[640px] border-collapse;
+  }
+
+  .table th {
+    @apply text-left text-[13px] font-semibold text-muted px-4 py-3 border-b border-line whitespace-nowrap;
+  }
+
+  .table td {
+    @apply px-4 py-3.5 border-b border-row-line align-middle;
+  }
+
+  .table .muted {
+    @apply text-muted whitespace-nowrap;
+  }
+
+  .table .title-link {
+    @apply font-semibold no-underline;
+  }
+
   .alert-error {
     @apply bg-danger-soft text-danger rounded-md px-3 py-2.5 text-sm font-medium;
   }
