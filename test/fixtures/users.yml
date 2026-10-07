@@ -5,6 +5,11 @@ customer:
   password_digest: <%= password_digest %>
   role: customer
 
+other_customer:
+  email_address: other@example.com
+  password_digest: <%= password_digest %>
+  role: customer
+
 agent:
   email_address: agent@example.com
   password_digest: <%= password_digest %>

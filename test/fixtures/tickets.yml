@@ -1,0 +1,21 @@
+export_failure:
+  title: Cannot export monthly report
+  description: Clicking Export spins forever and nothing downloads.
+  severity: high
+  status: in_progress
+  creator: customer
+  assignee: agent
+
+slow_login:
+  title: Login page loads slowly
+  description: The sign in page takes ten seconds to appear.
+  severity: medium
+  status: open
+  creator: customer
+
+invoice_typo:
+  title: Typo on invoice footer
+  description: The footer says Thnak you instead of Thank you.
+  severity: low
+  status: resolved
+  creator: other_customer

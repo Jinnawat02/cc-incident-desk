@@ -22,7 +22,10 @@
   </head>
 
   <body>
-    <%= render "layouts/topbar" if authenticated? %>
+    <% if authenticated? %>
+      <%= render "layouts/topbar" %>
+      <%= render "layouts/flash" %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
