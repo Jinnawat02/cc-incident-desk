@@ -1,0 +1,12 @@
+<div class="card p-5 flex flex-col gap-3.5">
+  <h2 class="text-base font-bold">Details</h2>
+  <div class="detail">
+    <span class="detail-label">Status</span>
+    <span><%= render "status_badge", ticket: ticket %></span>
+  </div>
+  <div class="detail">
+    <span class="detail-label">Assignee</span>
+    <span><%= assignee_label(ticket) %></span>
+  </div>
+  <%= render "static_details", ticket: ticket %>
+</div>

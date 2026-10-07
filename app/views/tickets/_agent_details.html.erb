@@ -1,0 +1,31 @@
+<%= form_with model: ticket, method: :patch, class: "card p-5 flex flex-col gap-3.5" do |form| %>
+  <h2 class="text-base font-bold">Details</h2>
+
+  <% if ticket.errors.any? %>
+    <div class="alert-error" role="alert">
+      <ul class="list-disc pl-5">
+        <% ticket.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :status, class: "detail-label" %>
+    <%= form.select :status, status_options, {}, class: "input" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :assignee_id, "Assignee", class: "detail-label" %>
+    <%= form.select :assignee_id, assignee_options, { include_blank: "Unassigned" }, class: "input" %>
+  </div>
+
+  <%= render "static_details", ticket: ticket %>
+
+  <%= form.submit "Save changes", class: "btn btn-primary w-full mt-1" %>
+
+  <% if notice %>
+    <div class="notice-success" role="status"><%= notice %></div>
+  <% end %>
+<% end %>

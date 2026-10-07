@@ -121,4 +121,13 @@ class DashboardsControllerTest < ActionDispatch::IntegrationTest
     assert_select "nav[aria-label=?]", "Filter by status", count: 0
     assert_select "tbody tr", 2
   end
+
+  test "show subscribes a customer to live status updates for their tickets" do
+    sign_in_as users(:customer)
+
+    get root_path
+
+    assert_select "turbo-cable-stream-source", 1
+    assert_select "tbody [data-ticket-status-id]", 2
+  end
 end

@@ -176,4 +176,8 @@
   .pill.is-active {
     @apply bg-ink text-white border-ink hover:text-white hover:border-ink;
   }
+
+  .notice-success {
+    @apply text-sm font-semibold text-success;
+  }
 }
