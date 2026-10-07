@@ -248,4 +248,19 @@ class TicketsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
     assert ticket.reload.open?
   end
+
+  test "show renders the comment thread oldest first with a comment form" do
+    sign_in_as @customer
+    ticket = tickets(:export_failure)
+
+    get ticket_path(ticket)
+
+    assert_select "h2", "Comments (2)"
+    assert_select "#comments_ticket_#{ticket.id} > div" do |comments|
+      assert_match comments(:customer_report).body, comments.first.text
+      assert_match comments(:agent_reply).body, comments.last.text
+    end
+    assert_select ".role-agent", "Agent"
+    assert_select "form[action=?] textarea[placeholder=?]", ticket_comments_path(ticket), "Write a comment…"
+  end
 end

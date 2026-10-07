@@ -1,0 +1,10 @@
+<%= form_with model: [ ticket, comment ], id: dom_id(ticket, :comment_form), class: "flex flex-col gap-2" do |form| %>
+  <% if comment.errors.any? %>
+    <div class="alert-error" role="alert"><%= comment.errors.full_messages.to_sentence %></div>
+  <% end %>
+  <%= form.label :body, "Add a comment", class: "label" %>
+  <%= form.text_area :body, class: "textarea", rows: 3, required: true, placeholder: comment_placeholder %>
+  <div class="flex flex-wrap justify-end gap-3">
+    <%= form.submit "Post comment", class: "btn btn-primary" %>
+  </div>
+<% end %>

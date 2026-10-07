@@ -20,6 +20,8 @@
         <h2 class="section-label">Description</h2>
         <div class="whitespace-pre-wrap"><%= @ticket.description %></div>
       </section>
+
+      <%= render "comments/thread", ticket: @ticket, comments: @ticket.comments.chronological.includes(:author) %>
     </div>
 
     <aside class="flex-[1_1_260px]">

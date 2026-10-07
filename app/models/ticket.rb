@@ -1,6 +1,7 @@
 class Ticket < ApplicationRecord
   belongs_to :creator, class_name: "User", inverse_of: :created_tickets
   belongs_to :assignee, class_name: "User", optional: true, inverse_of: :assigned_tickets
+  has_many :comments, dependent: :destroy, inverse_of: :ticket
   has_many :status_changes, class_name: "TicketStatusChange", dependent: :destroy, inverse_of: :ticket
 
   enum :severity, { low: 0, medium: 1, high: 2, urgent: 3 }, validate: true
