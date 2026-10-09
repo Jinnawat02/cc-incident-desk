@@ -10,6 +10,8 @@ namespace :users do
       require "io/console"
       print "Password: "
       $stdin.noecho(&:gets).to_s.chomp.tap { puts }
+    rescue Errno::ENOTTY
+      abort "\nNo terminal to prompt for a password on. Set USER_PASSWORD instead."
     end
 
     user = User.new(email_address: email, password: password, role: role)

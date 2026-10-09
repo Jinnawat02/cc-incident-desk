@@ -49,4 +49,18 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     get root_path
     assert_redirected_to new_session_path
   end
+
+  test "log out redirects a visitor who isn't signed in to sign-in" do
+    delete session_path
+
+    assert_redirected_to new_session_path
+  end
+
+  test "sends a signed-in user from the sign-in page to the dashboard" do
+    sign_in_as @user
+
+    get new_session_path
+
+    assert_redirected_to root_path
+  end
 end

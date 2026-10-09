@@ -55,6 +55,16 @@ class UsersTasksTest < ActiveSupport::TestCase
     end
   end
 
+  test "asks for USER_PASSWORD when there is no terminal to prompt on" do
+    input = Object.new
+    def input.noecho = raise(Errno::ENOTTY)
+
+    with_stdin(input) do
+      assert_aborts_with(/Set USER_PASSWORD/) { create_user "dave@example.com", "agent" }
+    end
+    assert_not User.exists?(email_address: "dave@example.com")
+  end
+
   private
     def create_user(email, role)
       Rake::Task["users:create"].invoke(email, role)
