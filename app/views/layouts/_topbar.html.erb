@@ -1,0 +1,10 @@
+<header class="border-b border-line bg-surface">
+  <div class="mx-auto flex min-h-[60px] max-w-[1160px] flex-wrap items-center justify-between gap-3 px-6">
+    <%= link_to "Incident Desk", root_path, class: "text-[15px] font-bold uppercase tracking-[0.04em] text-accent no-underline hover:text-accent-dark" %>
+    <div class="flex items-center gap-4 text-sm text-muted">
+      <span><%= Current.user.email_address %> · <%= Current.user.role.humanize %></span>
+      <%= button_to "Log out", session_path, method: :delete,
+            class: "inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-line-strong bg-surface px-3.5 text-sm font-medium text-ink hover:border-line-hover" %>
+    </div>
+  </div>
+</header>

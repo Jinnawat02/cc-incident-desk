@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+/* Tokens ported from docs/design/styles.css */
+@theme {
+  --font-sans: "Public Sans", system-ui, sans-serif;
+
+  --color-canvas: #F4F4F1;
+  --color-surface: #FFFFFF;
+  --color-line: #E2E2DC;
+  --color-line-strong: #C9C9C2;
+  --color-line-hover: #A9A9A2;
+  --color-ink: #1A1A18;
+  --color-muted: #5C5C57;
+  --color-accent: #1F4F99;
+  --color-accent-dark: #163A73;
+  --color-danger: #A3170D;
+  --color-danger-soft: #FDE2E0;
+}
+
+@layer base {
+  body {
+    @apply bg-canvas font-sans text-[15px] text-ink;
+  }
+}

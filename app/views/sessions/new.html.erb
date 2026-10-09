@@ -1,0 +1,28 @@
+<% content_for :title, "Sign in · Incident Desk" %>
+
+<div class="flex min-h-screen items-center justify-center p-6">
+  <%= form_with url: session_path, class: "flex w-full max-w-[400px] flex-col gap-5 rounded-lg border border-line bg-surface p-8" do |form| %>
+    <div class="flex flex-col gap-1">
+      <div class="text-sm font-bold uppercase tracking-[0.04em] text-accent">Incident Desk</div>
+      <h1 class="text-[26px] font-bold">Sign in</h1>
+    </div>
+
+    <% if flash[:alert] %>
+      <div class="rounded-md bg-danger-soft px-3 py-2.5 text-sm font-medium text-danger" role="alert"><%= flash[:alert] %></div>
+    <% end %>
+
+    <div class="flex flex-col gap-1.5">
+      <%= form.label :email_address, "Email", class: "text-sm font-semibold" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "email", placeholder: "you@company.com", value: params[:email_address],
+            class: "h-11 w-full rounded-md border border-line-strong bg-surface px-3 text-[15px]" %>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <%= form.label :password, class: "text-sm font-semibold" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "••••••••", maxlength: 72,
+            class: "h-11 w-full rounded-md border border-line-strong bg-surface px-3 text-[15px]" %>
+    </div>
+
+    <%= form.submit "Sign in", class: "inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-md bg-accent px-[18px] text-[15px] font-semibold text-white hover:bg-accent-dark" %>
+  <% end %>
+</div>
