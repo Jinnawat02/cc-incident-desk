@@ -1,0 +1,82 @@
+# CodeRabbit configuration for Support Ticket & Incident Tracker
+# Schema reference: https://docs.coderabbit.ai/reference/configuration
+
+language: en-US
+
+reviews:
+  profile: chill
+  request_changes_workflow: true
+  high_level_summary: true
+  review_status: true
+  collapse_walkthrough: false
+
+  poem: false
+
+  path_filters:
+    - "!vendor/**"
+    - "!tmp/**"
+    - "!log/**"
+    - "!coverage/**"
+    - "!node_modules/**"
+    - "!public/assets/**"
+    - "!storage/**"
+    - "!db/schema.rb"
+    - "!db/structure.sql"
+    - "!package-lock.json"
+    - "!yarn.lock"
+    - "!Gemfile.lock"
+
+  path_instructions:
+    - path: "app/controllers/**"
+      instructions: |
+        Focus on authorization, authentication, access control, and correct
+        HTTP responses. Customers must only access and modify their own tickets.
+        Agents may access, assign, and update any ticket. Check for IDOR
+        vulnerabilities and avoid relying on UI restrictions for authorization.
+
+    - path: "app/models/**"
+      instructions: |
+        Review model validations, associations, database consistency, and
+        business rules. Tickets must default to Open. Severity must be Low,
+        Medium, High, or Urgent. Status must be Open, In Progress, or Resolved.
+        Assignees are optional and must reference valid agents.
+        Avoid N+1 queries and enforce invariants at the appropriate layer.
+
+    - path: "app/jobs/**"
+      instructions: |
+        Review background job reliability, retry behavior, idempotency, and
+        race conditions. High and Urgent tickets that remain Open for more
+        than 15 minutes without an assignee must be flagged as Overdue and
+        produce a notification log. Avoid duplicate logs and ensure the job
+        rechecks the ticket's current state before updating it.
+
+    - path: "app/channels/**"
+      instructions: |
+        Review real-time broadcasting and subscription authorization.
+        Ensure customers only receive updates for tickets they are allowed
+        to access. Check for information leakage, stale subscriptions,
+        and unnecessary broadcasts.
+
+    - path: "app/views/**"
+      instructions: |
+        Review Turbo Frames, Turbo Streams, and Hotwire interactions.
+        Verify that ticket status changes and new comments appear without
+        full-page reloads. Check HTML safety, escaping, and consistent UI
+        updates after successful and failed requests.
+
+    - path: "app/services/**"
+      instructions: |
+        Review business logic, transaction boundaries, error handling,
+        and side effects. Status changes must generate an internal audit
+        event. Ensure events are not lost or duplicated when database
+        operations fail or jobs are retried.
+
+    - path: "test/**"
+      instructions: |
+        Check test coverage for authorization boundaries, ticket status
+        transitions, severity rules, real-time updates, overdue processing,
+        audit events, and background job idempotency. Prefer behavior-based
+        tests over implementation-detail assertions.
+
+chat:
+  auto_reply: false
