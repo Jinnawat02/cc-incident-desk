@@ -13,6 +13,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".alert-error", count: 0
   end
 
+  test "new redirects a signed-in user to the dashboard" do
+    sign_in_as @user
+
+    get new_session_path
+
+    assert_redirected_to root_path
+  end
+
   test "create with valid credentials redirects to the dashboard" do
     post session_path, params: { email_address: @user.email_address, password: "password" }
 

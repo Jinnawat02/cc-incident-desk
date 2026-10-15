@@ -8,7 +8,7 @@ class User < ApplicationRecord
   validates :email_address, presence: true, uniqueness: true
   validates :role, inclusion: { in: Role::NAMES, message: "must be customer or agent" }
 
-  after_create :assign_role
+  after_save :assign_role, if: -> { @role }
 
   def role
     (@role || roles.first&.name)&.inquiry
@@ -20,6 +20,8 @@ class User < ApplicationRecord
 
   private
     def assign_role
+      (Role::NAMES - [ @role ]).each { |name| remove_role name }
       add_role @role
+      @role = nil
     end
 end

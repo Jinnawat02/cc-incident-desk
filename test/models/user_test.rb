@@ -37,6 +37,15 @@ class UserTest < ActiveSupport::TestCase
     assert_includes user.errors[:role], "must be customer or agent"
   end
 
+  test "changing the role replaces the previous one" do
+    user = users(:customer)
+
+    user.update!(role: "agent")
+
+    assert_equal %w[ agent ], user.reload.roles.pluck(:name)
+    assert user.role.agent?
+  end
+
   test "role of fixtures" do
     assert users(:customer).role.customer?
     assert users(:agent).role.agent?

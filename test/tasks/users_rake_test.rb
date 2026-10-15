@@ -50,11 +50,30 @@ class UsersRakeTest < ActiveSupport::TestCase
     assert_match "Usage: bin/rails \"users:create[email,role]\"", err
   end
 
+  test "asks for PASSWORD when there is no terminal to prompt on" do
+    _, err = capture_io do
+      assert_raises(SystemExit) do
+        with_stdin(StringIO.new) do
+          with_password(nil) { Rake::Task["users:create"].invoke("new@example.com", "agent") }
+        end
+      end
+    end
+
+    assert_match "Set PASSWORD", err
+  end
+
   private
     def with_password(password)
       previous, ENV["PASSWORD"] = ENV["PASSWORD"], password
       yield
     ensure
       ENV["PASSWORD"] = previous
+    end
+
+    def with_stdin(io)
+      previous, $stdin = $stdin, io
+      yield
+    ensure
+      $stdin = previous
     end
 end
