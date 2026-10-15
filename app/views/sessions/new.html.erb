@@ -1,0 +1,24 @@
+<% content_for :title, "Sign in · Incident Desk" %>
+
+<div class="auth">
+  <%= form_with url: session_path, class: "card auth-card form" do |form| %>
+    <div class="flex flex-col gap-1">
+      <div class="auth-brand">Incident Desk</div>
+      <h1>Sign in</h1>
+    </div>
+
+    <%= tag.div(flash[:alert], class: "alert-error", role: "alert") if flash[:alert] %>
+
+    <div class="field">
+      <%= form.label :email_address, "Email", class: "label" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "email", placeholder: "you@company.com", value: params[:email_address], class: "input" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :password, class: "label" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "••••••••", maxlength: 72, class: "input" %>
+    </div>
+
+    <%= form.button "Sign in", class: "btn btn-primary btn-block" %>
+  <% end %>
+</div>

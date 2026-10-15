@@ -1,0 +1,5 @@
+customer:
+  name: customer
+
+agent:
+  name: agent

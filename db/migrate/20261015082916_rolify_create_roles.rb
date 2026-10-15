@@ -1,0 +1,17 @@
+class RolifyCreateRoles < ActiveRecord::Migration[8.1]
+  def change
+    create_table :roles do |t|
+      t.string :name, null: false
+      t.references :resource, polymorphic: true
+
+      t.timestamps
+    end
+    add_index :roles, %i[ name resource_type resource_id ], unique: true
+
+    create_table :users_roles, id: false do |t|
+      t.references :user, null: false, foreign_key: true, index: false
+      t.references :role, null: false, foreign_key: true
+    end
+    add_index :users_roles, %i[ user_id role_id ], unique: true
+  end
+end

@@ -1,0 +1,9 @@
+<header class="topbar">
+  <div class="topbar-inner">
+    <%= link_to "Incident Desk", root_path, class: "brand" %>
+    <div class="user">
+      <span><%= Current.user.email_address %> · <%= Current.user.role.humanize %></span>
+      <%= button_to "Log out", session_path, method: :delete, class: "btn btn-plain btn-sm" %>
+    </div>
+  </div>
+</header>
